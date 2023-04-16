@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.8 <0.9.0;
+pragma solidity ^0.8.8;
 //import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+//import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "./PriceConverter.sol";
 
 //868276
@@ -24,7 +25,7 @@ contract FundMe {
     address[] private s_funders;
     address private immutable i_owner;
     uint256 public constant minimumUSD = 50 * 10 ** 18;
-    AggregatorV3Interface private s_priceFeed;
+    AggregatorV3Interface public s_priceFeed;
 
     modifier onlyOwner() {
         //require(msg.sender == owner);
@@ -32,9 +33,9 @@ contract FundMe {
         _;
     }
 
-    constructor(address priceFeedAddress) public {
+    constructor(address priceFeed) {
+        s_priceFeed = AggregatorV3Interface(priceFeed);
         i_owner = msg.sender;
-        s_priceFeed = AggregatorV3Interface(priceFeedAddress);
     }
 
     receive() external payable {
